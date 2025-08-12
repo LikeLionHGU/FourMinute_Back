@@ -5,5 +5,6 @@ import repository.GatherRepository;
 
 @Service
 public class GatherService {
+
     private GatherRepository gatherRepository;
 }

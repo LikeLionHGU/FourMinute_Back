@@ -5,6 +5,7 @@ import repository.ReviewRepository;
 
 @Service
 class ReviewService {
+
     private ReviewRepository reviewRepository;
 
 }
