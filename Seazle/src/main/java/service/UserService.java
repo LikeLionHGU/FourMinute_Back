@@ -3,6 +3,7 @@ package service;
 import domain.Location;
 import domain.Review;
 import domain.User;
+import dto.request.CommentRequest;
 import dto.request.ReviewRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final String[] keyWords={};
+    private final String[] keyWords={"교통","주차","친절","사진","휴식","안전","수업","시설","가격","장비","경치","파도","재미"};
 
     private final ReviewRepository reviewRepository;
     private final LocationRepository locationRepository;
@@ -31,10 +32,15 @@ public class UserService {
 
     }
 
+    public Object writeComment(CommentRequest commentRequest, MyUserDetails myUserDetails) {
+
+
+    }
+
     @Transactional
     public String writeReview(ReviewRequest reviewRequest, MyUserDetails myUserDetails) {
         try{
-            Location location = locationRepository.findById(reviewRequest.getLocationId()).orElse(null);
+            Location location = locationRepository.findById(reviewRequest.getId()).orElse(null);
             if(location == null) return null;
             User user = myUserDetails.getUser();
             Review review = Review.review(reviewRequest.getContent(),reviewRequest.getScore(),location,user);
@@ -71,4 +77,6 @@ public class UserService {
         );
         return Arrays.asList(Objects.requireNonNull(response.getBody()));
     }
+
+
 }

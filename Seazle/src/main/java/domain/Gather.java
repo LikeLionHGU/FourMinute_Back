@@ -23,16 +23,13 @@ public class Gather extends BaseEntity {
     private String title;
     private String sport;
     private String time;
-    //location
     private Long capacity;
     private String description;
-    private String price;
+    private String originalPrice;
+    private String currentPrice;
     private String deadline;
-
+    private String maker;
     private Long total;
-
-    private Long price;
-
 
     @ManyToOne
     @JoinColumn(nullable=false)

@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CompareDetailResponse {
+public class CompareDetailResponse { //공사중
 
     private Long id;
     private String name;

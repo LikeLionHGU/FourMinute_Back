@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompareThumbResponse {
+public class CompareThumbResponse { //공사중
 
 
 

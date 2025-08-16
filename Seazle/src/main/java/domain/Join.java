@@ -20,6 +20,7 @@ public class Join extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    
+    private Long gatherId;
+    private Long userId;
 
 }

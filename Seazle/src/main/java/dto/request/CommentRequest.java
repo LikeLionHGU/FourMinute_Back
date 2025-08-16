@@ -9,10 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewRequest {
+public class CommentRequest {
 
     private Long id;
     private String content;
-    private Long score;
 
 }

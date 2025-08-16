@@ -35,7 +35,8 @@ public class Location extends BaseEntity {
     private Long reviewCount;
     private String reserveLink;
     private Long score;
-    private Long price;
+    private Long price1;
+    private Long price2;
     private String region;
 
     @ElementCollection(fetch = FetchType.LAZY)

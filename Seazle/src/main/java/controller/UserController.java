@@ -1,5 +1,6 @@
 package controller;
 
+import dto.request.CommentRequest;
 import dto.request.ReviewRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,9 +15,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/write/review")
+    @PostMapping("/review")
     public Object writeReview(@RequestBody ReviewRequest reviewRequest, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         return userService.writeReview(reviewRequest, myUserDetails);
+    }
+
+    @PostMapping("/comment")
+    public Object writeComment(@RequestBody CommentRequest commentRequest, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+        return userService.writeComment(commentRequest, myUserDetails);
     }
 
     @PutMapping("/join/{gatherId}")
