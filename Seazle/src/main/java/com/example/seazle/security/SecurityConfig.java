@@ -20,7 +20,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
 
-    private final MyUserDetailsService myUserDetailsService;
     private final JwtUtil jwtUtil;
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -43,13 +42,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/user").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/user/**").hasAnyAuthority("USER","ADMIN")
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(new AuthorizationFilter(jwtUtil),AuthenticationFilter.class)
                 .addFilter(new AuthenticationFilter(authenticationManager(authenticationConfiguration),jwtUtil));
-
 
         return http.build();
     }

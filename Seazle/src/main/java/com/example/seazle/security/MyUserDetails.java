@@ -26,7 +26,7 @@ public class MyUserDetails implements UserDetails {
     }
 
     public String getUsername() {
-        return user.getUsername();
+        return user.getName();
     }
 
 

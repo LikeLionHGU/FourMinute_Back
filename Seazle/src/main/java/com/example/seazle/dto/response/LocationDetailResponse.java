@@ -41,7 +41,7 @@ public class LocationDetailResponse {
                 .aiReview(location.getAiReview())
                 .longitude(location.getLongitude())
                 .latitude(location.getLatitude())
-                .reviewCount(location.getReviewCount())
+                .reviewCount((long)location.getReviews().size())
                 .reserveLink(location.getReserveLink())
                 .build();
     }

@@ -19,7 +19,7 @@ public class CompareController {
 
     private final CompareService compareService;
 
-    @GetMapping("/detail")
+    @GetMapping("/details")
     public ResponseEntity<Object> getCompareDetails(@RequestBody CompareDetailRequest compareDetailRequest) {
         List<CompareDetailResponse> compareDetailResponses=compareService.getCompareDetails(compareDetailRequest);
         if(compareDetailResponses==null)  return ResponseEntity.badRequest().body(new MessageResponse("T.T"));

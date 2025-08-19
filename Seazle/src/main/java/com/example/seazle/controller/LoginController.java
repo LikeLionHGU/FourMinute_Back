@@ -20,8 +20,9 @@ public class LoginController {
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody RegisterRequest registerRequest) {
-        UserNameResponse nameResponse = userService.register(registerRequest);
+        Object nameResponse = userService.register(registerRequest);
         if(nameResponse==null) return ResponseEntity.badRequest().body(new MessageResponse("T.T"));
+        if(nameResponse.equals("duplicated")) return ResponseEntity.badRequest().body(new MessageResponse("duplicated"));
         return ResponseEntity.ok().body(nameResponse);
     }
 

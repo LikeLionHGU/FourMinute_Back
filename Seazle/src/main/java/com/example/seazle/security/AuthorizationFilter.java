@@ -33,9 +33,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String username=jwtUtil.getUsername(token);
+        String name=jwtUtil.getUsername(token);
         String role=jwtUtil.getRole(token);
-        User user=new User(username,"",role,"","","");
+        User user=new User("","",role,name,"","");
         MyUserDetails myUserDetails=new MyUserDetails(user);
         Authentication authentication=new UsernamePasswordAuthenticationToken(myUserDetails,null,myUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

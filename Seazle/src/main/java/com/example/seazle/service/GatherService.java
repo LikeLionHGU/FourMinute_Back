@@ -8,7 +8,7 @@ import com.example.seazle.dto.response.GatherMemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.seazle.repository.GatherRepository;
-import com.example.seazle.repository.JoinRepository;
+import com.example.seazle.repository.ParticipateRepository;
 import com.example.seazle.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.List;
 public class GatherService {
 
     private final GatherRepository gatherRepository;
-    private final JoinRepository joinRepository;
+    private final ParticipateRepository participateRepository;
     private final UserRepository userRepository;
 
     public GatherDetailResponse getGatherDetail(Long gatherId) {
@@ -36,11 +36,10 @@ public class GatherService {
     }
 
     public List<GatherMemberResponse> getGatherMembers(Long gatherId) {
-        List<Join> joins=joinRepository.findAllByGatherId(gatherId).orElse(null);
-        if(joins==null) return null;
+        List<Participate> participates = participateRepository.findAllByGatherId(gatherId);
         List<User> users=new ArrayList<>();
-        for(Join join:joins){
-            User user=userRepository.findById(join.getUserId()).orElse(null);
+        for(Participate participate : participates){
+            User user=userRepository.findById(participate.getUserId()).orElse(null);
             if(user!=null) users.add(user);
         }
         return users.stream().map(GatherMemberResponse::gatherMemberResponse).toList();

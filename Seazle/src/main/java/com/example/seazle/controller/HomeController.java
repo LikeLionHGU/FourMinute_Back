@@ -18,7 +18,7 @@ public class HomeController {
 
     private final HomeService homeService;
 
-    @GetMapping("/location/list")
+    @PostMapping("/location/list")
     public ResponseEntity<Object> getLocationList(@RequestBody LocationListRequest locationListRequest) {
         List<LocationResponse> locationList=homeService.getLocationList(locationListRequest);
         return ResponseEntity.ok().body(locationList);

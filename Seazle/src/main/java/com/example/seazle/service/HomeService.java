@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.example.seazle.repository.GatherRepository;
 import com.example.seazle.repository.LocationRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +53,7 @@ public class HomeService {
     }
 
     public List<LocationResponse> getLocationSearch(String input) {
+        // 확인 필요
         List<Location> locationSearch = new ArrayList<>();
         List<Location> locations = locationRepository.findAllBySport(input);
         for(Location location : locations) {
@@ -67,10 +70,19 @@ public class HomeService {
             gathers=gatherRepository.findAll();
         }
         else{
-            gathers=gatherRepository.findAllBySport(gatherListRequest.getSport());
+            String[] sports = gatherListRequest.getSport().split(",");
+            for(String sport : sports) {
+                List<Gather> gathersBySport = gatherRepository.findAllBySport(sport);
+                gathers.removeAll(gathersBySport);
+                gathers.addAll(gathersBySport);
+            }
         }
         if(!gatherListRequest.getDate().isEmpty()){
-            gathers.removeIf(gather -> !gather.getTime().equals(gatherListRequest.getDate()));
+            LocalDate date=LocalDate.parse(gatherListRequest.getDate());
+            for(Gather gather : gathers) {
+                LocalDateTime time=LocalDateTime.parse(gather.getTime());
+                if(!date.isEqual(time.toLocalDate())) gathers.remove(gather);
+            }
         }
         return gathers.stream().map(GatherResponse::gatherResponse).toList();
     }

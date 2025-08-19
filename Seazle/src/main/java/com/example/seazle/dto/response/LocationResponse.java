@@ -12,6 +12,7 @@ public class LocationResponse {
 
     private Long id;
     private String name;
+    private String thumbnail;
     private String sport;
     private String description;
     private String region;
@@ -22,11 +23,12 @@ public class LocationResponse {
         return LocationResponse.builder()
                 .id(location.getId())
                 .name(location.getName())
+                .thumbnail(location.getImageUrl())
                 .sport(location.getSport())
-                .description(location.getOneLine())
+                .description(location.getAiReview())
                 .region(location.getRegion())
                 .score(location.getScore())
-                .reviewCount(location.getReviewCount())
+                .reviewCount((long)location.getReviews().size())
                 .build();
     }
 

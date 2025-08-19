@@ -23,7 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final GatherRepository gatherRepository;
     private final CommentRepository commentRepository;
-    private final JoinRepository joinRepository;
+    private final ParticipateRepository participateRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -32,7 +32,7 @@ public class UserService {
             if (!gatherRepository.existsById(gatherId)) return false;
             User user = userRepository.findByUsername(myUserDetails.getUser().getUsername()).orElse(null);
             if(user == null) return false;
-            joinRepository.save(new Join(gatherId, user.getId()));
+            participateRepository.save(new Participate(gatherId, user.getId()));
             return true;
         }
         catch (Exception e){
@@ -59,7 +59,7 @@ public class UserService {
         try{
             Location location = locationRepository.findById(reviewRequest.getId()).orElse(null);
             if(location == null) return false;
-            User user = userRepository.findByUsername(myUserDetails.getUser().getUsername()).orElse(null);
+            User user = userRepository.findByName(myUserDetails.getUsername()).orElse(null);
             if(user == null) return false;
             Review review = Review.review(reviewRequest.getContent(),reviewRequest.getScore(),location,user);
             reviewRepository.save(review);
@@ -72,8 +72,11 @@ public class UserService {
         }
     }
 
-    public UserNameResponse register(RegisterRequest registerRequest) {
+    public Object register(RegisterRequest registerRequest) {
         try{
+            if(userRepository.existsByUsername(registerRequest.getUsername())){
+                return "duplicate";
+            }
             User user = new User(
                     registerRequest.getUsername(),
                     passwordEncoder.encode(registerRequest.getPassword()),

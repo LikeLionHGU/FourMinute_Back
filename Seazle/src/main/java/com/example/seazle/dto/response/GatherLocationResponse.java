@@ -20,7 +20,7 @@ public class GatherLocationResponse {
         return GatherLocationResponse.builder()
                 .id(location.getId())
                 .name(location.getName())
-                .description(location.getOneLine())
+                .description(location.getAiReview())
                 .address(location.getAddress())
                 .time(location.getTime())
                 .build();

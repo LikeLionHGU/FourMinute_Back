@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Join extends BaseEntity {
+public class Participate extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class Join extends BaseEntity {
     private Long gatherId;
     private Long userId;
 
-    public Join(Long gatherId, Long userId) {
+    public Participate(Long gatherId, Long userId) {
         this.gatherId = gatherId;
         this.userId = userId;
     }

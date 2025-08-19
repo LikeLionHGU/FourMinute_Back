@@ -1,10 +1,8 @@
 package com.example.seazle.domain;
 
+import com.example.seazle.dto.request.GatherRequest;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Gather extends BaseEntity {
 
     @Id
@@ -42,5 +41,22 @@ public class Gather extends BaseEntity {
     @OneToMany(mappedBy="gather", fetch= FetchType.LAZY, cascade=CascadeType.ALL)
     private List<Comment> comments= new ArrayList<>();
 
+
+    public static Gather gather(GatherRequest gatherRequest, User user, Location location) {
+        return Gather.builder()
+                .title(gatherRequest.getTitle())
+                .sport(gatherRequest.getSport())
+                .time(gatherRequest.getTime())
+                .capacity(gatherRequest.getCapacity())
+                .description(gatherRequest.getDescription())
+                .originalPrice(gatherRequest.getOriginalPrice())
+                .currentPrice(gatherRequest.getCurrentPrice())
+                .deadline(gatherRequest.getDeadline())
+                .maker(gatherRequest.getMaker())
+                .total(gatherRequest.getTotal())
+                .location(location)
+                .user(user)
+                .build();
+    }
 
 }

@@ -7,10 +7,13 @@ import com.example.seazle.dto.response.LocationAnalysisResponse;
 import com.example.seazle.dto.response.LocationDetailResponse;
 import com.example.seazle.dto.response.LocationGatherResponse;
 import com.example.seazle.dto.response.LocationReviewResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.seazle.repository.LocationRepository;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,10 +23,16 @@ import java.util.List;
 public class LocationService {
 
     private final LocationRepository locationRepository;
+    private final AnalysisService analysisService;
 
+    @Transactional
     public LocationDetailResponse getLocationDetail(Long locationId) {
         Location location = locationRepository.findById(locationId).orElse(null);
         if(location==null) return null;
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime modified = location.getModified();
+        Duration duration = Duration.between(modified, now);
+        if(duration.toDays()>1) location.updateAiReview(analysisService.summarizeAnalysis(location));
         return LocationDetailResponse.locationDetailResponse(location);
     }
 
@@ -31,6 +40,7 @@ public class LocationService {
         Location location = locationRepository.findById(locationId).orElse(null);
         if(location==null) return null;
         List<Review> reviews = location.getReviews();
+        Collections.reverse(reviews);
         return reviews.stream().map(LocationReviewResponse::locationReviewResponse).toList();
     }
 
@@ -39,7 +49,6 @@ public class LocationService {
         if(location==null) return null;
         List<Gather> gathers = location.getGathers();
         return gathers.stream().map(LocationGatherResponse::locationGatherResponse).toList();
-
     }
 
     public List<LocationAnalysisResponse> getLocationAnalysis(Long locationId) {
