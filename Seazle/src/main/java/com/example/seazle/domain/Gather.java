@@ -28,7 +28,6 @@ public class Gather extends BaseEntity {
     private String currentPrice;
     private String deadline;
     private String maker;
-    private Long total;
 
     @ManyToOne
     @JoinColumn(nullable=false)
@@ -53,7 +52,6 @@ public class Gather extends BaseEntity {
                 .currentPrice(gatherRequest.getCurrentPrice())
                 .deadline(gatherRequest.getDeadline())
                 .maker(gatherRequest.getMaker())
-                .total(gatherRequest.getTotal())
                 .location(location)
                 .user(user)
                 .build();

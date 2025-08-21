@@ -1,6 +1,7 @@
 package com.example.seazle.controller;
 
 import com.example.seazle.dto.response.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +27,8 @@ public class GatherController {
     }
 
     @GetMapping("/comments/{gatherId}")
-    public ResponseEntity<Object> getGatherComments(@PathVariable Long gatherId) {
-        List<GatherCommentResponse> gatherComments=gatherService.getGatherComments(gatherId);
+    public ResponseEntity<Object> getGatherComments(@PathVariable Long gatherId, HttpServletRequest request) {
+        List<GatherCommentResponse> gatherComments=gatherService.getGatherComments(gatherId,request);
         if (gatherComments==null) return ResponseEntity.badRequest().body(new MessageResponse("T.T"));
         return ResponseEntity.ok().body(gatherComments);
     }

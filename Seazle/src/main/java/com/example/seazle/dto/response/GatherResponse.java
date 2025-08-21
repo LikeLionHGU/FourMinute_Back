@@ -18,7 +18,7 @@ public class GatherResponse {
     private Long capacity;
     private Long total;
 
-    public static GatherResponse gatherResponse(Gather gather) {
+    public static GatherResponse gatherResponse(Gather gather, Long total) {
         return GatherResponse.builder()
                 .id(gather.getId())
                 .title(gather.getTitle())
@@ -26,7 +26,7 @@ public class GatherResponse {
                 .time(gather.getTime())
                 .location(gather.getLocation().getName())
                 .capacity(gather.getCapacity())
-                .total(gather.getTotal())
+                .total(total)
                 .build();
     }
 

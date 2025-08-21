@@ -9,6 +9,7 @@ import com.example.seazle.dto.request.GatherListRequest;
 import com.example.seazle.dto.request.LocationListRequest;
 import com.example.seazle.dto.response.GatherResponse;
 import com.example.seazle.dto.response.LocationResponse;
+import com.example.seazle.repository.ParticipateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.seazle.repository.GatherRepository;
@@ -26,6 +27,7 @@ public class HomeService {
 
     private final LocationRepository locationRepository;
     private final GatherRepository gatherRepository;
+    private final ParticipateRepository participateRepository;
 
     public List<LocationResponse> getLocationList(LocationListRequest locationListRequest) {
         List<Location> locations = new ArrayList<>();
@@ -53,11 +55,10 @@ public class HomeService {
     }
 
     public List<LocationResponse> getLocationSearch(String input) {
-        // 확인 필요
         List<Location> locationSearch = new ArrayList<>();
-        List<Location> locations = locationRepository.findAllBySport(input);
+        List<Location> locations = locationRepository.findAll();
         for(Location location : locations) {
-            if(location.getName().contains(input)) {
+            if(location.getName().contains(input)||location.getDescription().contains(input)) {
                 locationSearch.add(location);
             }
         }
@@ -84,7 +85,7 @@ public class HomeService {
                 if(!date.isEqual(time.toLocalDate())) gathers.remove(gather);
             }
         }
-        return gathers.stream().map(GatherResponse::gatherResponse).toList();
+        return gathers.stream().map(gather->GatherResponse.gatherResponse(gather,(long)participateRepository.findAllByGatherId(gather.getId()).size())).toList();
     }
 
 

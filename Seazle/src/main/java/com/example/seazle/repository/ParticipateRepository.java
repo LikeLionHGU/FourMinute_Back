@@ -12,4 +12,8 @@ public interface ParticipateRepository extends JpaRepository<Participate, Long> 
 
 
     List<Participate> findAllByGatherId(Long gatherId);
+
+    Optional<Participate> findByGatherIdAndUserId(Long gatherId, Long id);
+
+
 }

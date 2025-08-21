@@ -5,6 +5,8 @@ import com.example.seazle.dto.response.GatherCommentResponse;
 import com.example.seazle.dto.response.GatherDetailResponse;
 import com.example.seazle.dto.response.GatherLocationResponse;
 import com.example.seazle.dto.response.GatherMemberResponse;
+import com.example.seazle.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.seazle.repository.GatherRepository;
@@ -21,14 +23,21 @@ public class GatherService {
     private final GatherRepository gatherRepository;
     private final ParticipateRepository participateRepository;
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     public GatherDetailResponse getGatherDetail(Long gatherId) {
         Gather gather=gatherRepository.findById(gatherId).orElse(null);
         if(gather==null) return null;
-        return GatherDetailResponse.gatherDetailResponse(gather);
+        List<Participate> participates=participateRepository.findAllByGatherId(gatherId);
+        return GatherDetailResponse.gatherDetailResponse(gather,(long)participates.size());
     }
 
-    public List<GatherCommentResponse> getGatherComments(Long gatherId) {
+    public List<GatherCommentResponse> getGatherComments(Long gatherId, HttpServletRequest request) {
+        String token=request.getHeader("Authorization");
+        if(token!=null){
+            String name=jwtUtil.getUsername(token);
+        }
+
         Gather gather =gatherRepository.findById(gatherId).orElse(null);
         if(gather==null) return null;
         List<Comment> comments=gather.getComments();

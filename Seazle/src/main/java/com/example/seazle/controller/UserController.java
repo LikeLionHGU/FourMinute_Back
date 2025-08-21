@@ -38,8 +38,11 @@ public class UserController {
 
     @PutMapping("/join/{gatherId}")
     public ResponseEntity<Object> joinGather(@PathVariable Long gatherId, @AuthenticationPrincipal MyUserDetails myUserDetails) {
-        Boolean state =  userService.joinGather(gatherId, myUserDetails);
-        if(state){
+        String state =  userService.joinGather(gatherId, myUserDetails);
+        if(state.equals("duplicated")){
+            return ResponseEntity.badRequest().body(new MessageResponse("duplicated"));
+        }
+        else if(state.equals("saved")){
             return ResponseEntity.ok().body(new MessageResponse("saved"));
         }
         else return ResponseEntity.badRequest().body(new MessageResponse("T.T"));

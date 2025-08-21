@@ -30,7 +30,7 @@ public class HomeController {
         return ResponseEntity.ok().body(locationList);
     }
 
-    @GetMapping("/gather/list")
+    @PostMapping("/gather/list")
     public ResponseEntity<Object> getGatherList(@RequestBody GatherListRequest gatherListRequest) {
         List<GatherResponse> gatherList=homeService.getGatherList(gatherListRequest);
         return ResponseEntity.ok().body(gatherList);

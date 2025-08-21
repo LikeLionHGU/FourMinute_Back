@@ -17,14 +17,14 @@ public class LocationGatherResponse {
     private Long capacity;
     private Long total;
 
-    public static LocationGatherResponse locationGatherResponse(Gather gather) {
+    public static LocationGatherResponse locationGatherResponse(Gather gather, Long total) {
         return LocationGatherResponse.builder()
                 .id(gather.getId())
                 .title(gather.getTitle())
                 .time(gather.getTime())
                 .location(gather.getLocation().getName())
                 .capacity(gather.getCapacity())
-                .total(gather.getTotal())
+                .total(total)
                 .build();
     }
 

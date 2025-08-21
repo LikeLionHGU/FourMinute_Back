@@ -16,6 +16,7 @@ public class Comment extends BaseEntity {
     private Long id;
 
     private String content;
+    private Long secrete;
 
     @ManyToOne
     @JoinColumn(nullable=false)

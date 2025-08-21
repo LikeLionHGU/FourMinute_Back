@@ -22,6 +22,5 @@ public class GatherRequest {
     private String currentPrice;
     private String deadline;
     private String maker;
-    private Long total;
 
 }

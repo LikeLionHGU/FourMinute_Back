@@ -19,16 +19,16 @@ public class CompareController {
 
     private final CompareService compareService;
 
-    @GetMapping("/details")
+    @PostMapping("/details")
     public ResponseEntity<Object> getCompareDetails(@RequestBody CompareDetailRequest compareDetailRequest) {
         List<CompareDetailResponse> compareDetailResponses=compareService.getCompareDetails(compareDetailRequest);
         if(compareDetailResponses==null)  return ResponseEntity.badRequest().body(new MessageResponse("T.T"));
         return ResponseEntity.ok(compareDetailResponses);
     }
 
-    @GetMapping("/thumb/{locationId}")
-    public ResponseEntity<Object> getCompareThumb(@PathVariable Long locationId) {
-        CompareThumbResponse compareThumbResponse=compareService.getCompareThumb(locationId);
+    @PostMapping("/thumb")
+    public ResponseEntity<Object> getCompareThumb(@RequestBody CompareDetailRequest compareDetailRequest) {
+        CompareThumbResponse compareThumbResponse=compareService.getCompareThumb(compareDetailRequest);
         if(compareThumbResponse==null) return ResponseEntity.badRequest().body(new MessageResponse("T.T"));
         return ResponseEntity.ok().body(compareThumbResponse);
     }

@@ -26,7 +26,7 @@ public class GatherDetailResponse {
     private String makerStatement;
     private Long total;
 
-    public static GatherDetailResponse gatherDetailResponse(Gather gather) {
+    public static GatherDetailResponse gatherDetailResponse(Gather gather, Long total) {
         return GatherDetailResponse.builder()
                 .id(gather.getId())
                 .title(gather.getTitle())
@@ -42,7 +42,7 @@ public class GatherDetailResponse {
                 .makerImage(gather.getUser().getImageUrl())
                 .makerContact(gather.getMaker())
                 .makerStatement(gather.getUser().getStatement())
-                .total(gather.getTotal())
+                .total(total)
                 .build();
     }
 

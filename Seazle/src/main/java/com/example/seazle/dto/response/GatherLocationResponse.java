@@ -15,6 +15,7 @@ public class GatherLocationResponse {
     private String description;
     private String address;
     private String time;
+    private String image;
 
     public static GatherLocationResponse gatherLocationResponse(Location location) {
         return GatherLocationResponse.builder()
@@ -23,6 +24,7 @@ public class GatherLocationResponse {
                 .description(location.getAiReview())
                 .address(location.getAddress())
                 .time(location.getTime())
+                .image(location.getImageUrl())
                 .build();
     }
 

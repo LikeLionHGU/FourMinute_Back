@@ -3,10 +3,9 @@ package com.example.seazle.service;
 import com.example.seazle.domain.Gather;
 import com.example.seazle.domain.Location;
 import com.example.seazle.domain.Review;
-import com.example.seazle.dto.response.LocationAnalysisResponse;
-import com.example.seazle.dto.response.LocationDetailResponse;
-import com.example.seazle.dto.response.LocationGatherResponse;
-import com.example.seazle.dto.response.LocationReviewResponse;
+import com.example.seazle.dto.response.*;
+import com.example.seazle.repository.ParticipateRepository;
+import com.example.seazle.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,7 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
     private final AnalysisService analysisService;
+    private final ParticipateRepository participateRepository;
 
     @Transactional
     public LocationDetailResponse getLocationDetail(Long locationId) {
@@ -48,7 +48,7 @@ public class LocationService {
         Location location = locationRepository.findById(locationId).orElse(null);
         if(location==null) return null;
         List<Gather> gathers = location.getGathers();
-        return gathers.stream().map(LocationGatherResponse::locationGatherResponse).toList();
+        return gathers.stream().map(gather-> LocationGatherResponse.locationGatherResponse(gather,(long)participateRepository.findAllByGatherId(gather.getId()).size())).toList();
     }
 
     public List<LocationAnalysisResponse> getLocationAnalysis(Long locationId) {

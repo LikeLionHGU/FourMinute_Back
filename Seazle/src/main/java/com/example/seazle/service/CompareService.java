@@ -45,10 +45,30 @@ public class CompareService {
         return compareDetails;
     }
 
-    public CompareThumbResponse getCompareThumb(Long locationId) {
-        Location location = locationRepository.findById(locationId).orElse(null);
-        if(location==null) return null;
-        return new CompareThumbResponse(location.getImageUrl());
+    public CompareThumbResponse getCompareThumb(CompareDetailRequest compareDetailRequest) {
+        CompareThumbResponse compareThumbResponse = new CompareThumbResponse();
+        if(compareDetailRequest.getItem1()>=0){
+            Location location = locationRepository.findById(compareDetailRequest.getItem1()).orElse(null);
+            if(location!=null){
+                compareThumbResponse.setThumb1(location.getImageUrl());
+            }
+            else return null;
+        }
+        if(compareDetailRequest.getItem2()>=0){
+            Location location = locationRepository.findById(compareDetailRequest.getItem2()).orElse(null);
+            if(location!=null){
+                compareThumbResponse.setThumb2(location.getImageUrl());
+            }
+            else return null;
+        }
+        if(compareDetailRequest.getItem3()>=0){
+            Location location = locationRepository.findById(compareDetailRequest.getItem3()).orElse(null);
+            if(location!=null){
+                compareThumbResponse.setThumb3(location.getImageUrl());
+            }
+            else return null;
+        }
+        return compareThumbResponse;
     }
 
 

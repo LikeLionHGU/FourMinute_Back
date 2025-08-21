@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CompareThumbResponse {
 
-    private String thumb;
+    private String thumb1;
+    private String thumb2;
+    private String thumb3;
 
 }

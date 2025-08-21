@@ -24,19 +24,20 @@ public class UserService {
     private final GatherRepository gatherRepository;
     private final CommentRepository commentRepository;
     private final ParticipateRepository participateRepository;
-
     private final PasswordEncoder passwordEncoder;
 
-    public Boolean joinGather(Long gatherId, MyUserDetails myUserDetails) {
+    public String joinGather(Long gatherId, MyUserDetails myUserDetails) {
         try{
-            if (!gatherRepository.existsById(gatherId)) return false;
-            User user = userRepository.findByUsername(myUserDetails.getUser().getUsername()).orElse(null);
-            if(user == null) return false;
+            if (!gatherRepository.existsById(gatherId)) return null;
+            User user = userRepository.findByName(myUserDetails.getUsername()).orElse(null);
+            if(user == null) return null;
+            Participate participate = participateRepository.findByGatherIdAndUserId(gatherId,user.getId()).orElse(null);
+            if(participate != null) return "duplicated";
             participateRepository.save(new Participate(gatherId, user.getId()));
-            return true;
+            return "saved";
         }
         catch (Exception e){
-            return false;
+            return null;
         }
     }
 
@@ -44,7 +45,7 @@ public class UserService {
         try{
             Gather gather = gatherRepository.findById(commentRequest.getId()).orElse(null);
             if (gather == null) return false;
-            User user = userRepository.findByUsername(myUserDetails.getUser().getUsername()).orElse(null);
+            User user = userRepository.findByName(myUserDetails.getUsername()).orElse(null);
             if(user == null) return false;
             commentRepository.save(Comment.comment(commentRequest.getContent(),gather,user));
             return true;
