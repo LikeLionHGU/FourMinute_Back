@@ -24,14 +24,15 @@ public class Location extends BaseEntity {
     private String name;
     private String imageUrl;
     private String sport;
+    @Column(length = 1000)
     private String description;
     private String address;
     private String time;
     private String number;
     private String priceImgUrl;
     private String socialLink;
-    private Long longitude;
-    private Long latitude;
+    private Double longitude;
+    private Double latitude;
     private String reserveLink;
     private Double score;
     private Long price1;

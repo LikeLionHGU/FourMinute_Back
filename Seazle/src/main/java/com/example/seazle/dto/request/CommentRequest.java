@@ -13,5 +13,6 @@ public class CommentRequest {
 
     private Long id;
     private String content;
+    private Long secrete;
 
 }

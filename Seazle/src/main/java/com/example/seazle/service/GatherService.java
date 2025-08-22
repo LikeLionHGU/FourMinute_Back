@@ -5,13 +5,13 @@ import com.example.seazle.dto.response.GatherCommentResponse;
 import com.example.seazle.dto.response.GatherDetailResponse;
 import com.example.seazle.dto.response.GatherLocationResponse;
 import com.example.seazle.dto.response.GatherMemberResponse;
+import com.example.seazle.repository.GatherRepository;
+import com.example.seazle.repository.ParticipateRepository;
+import com.example.seazle.repository.UserRepository;
 import com.example.seazle.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.seazle.repository.GatherRepository;
-import com.example.seazle.repository.ParticipateRepository;
-import com.example.seazle.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,20 @@ public class GatherService {
 
     public List<GatherCommentResponse> getGatherComments(Long gatherId, HttpServletRequest request) {
         String token=request.getHeader("Authorization");
-        if(token!=null){
-            String name=jwtUtil.getUsername(token);
+        Gather gather = gatherRepository.findById(gatherId).orElse(null);
+        if (gather == null) return null;
+        List<Comment> comments = gather.getComments();
+        if(token==null) {
+            return comments.stream().map(comment->comment.getSecrete()==0?GatherCommentResponse.gatherCommentResponse(comment):GatherCommentResponse.gatherCommentResponseSecrete(comment)).toList();
         }
-
-        Gather gather =gatherRepository.findById(gatherId).orElse(null);
-        if(gather==null) return null;
-        List<Comment> comments=gather.getComments();
-        return comments.stream().map(GatherCommentResponse::gatherCommentResponse).toList();
+        try{
+            token = token.substring(7);
+            String name=jwtUtil.getUsername(token);
+            return comments.stream().map(comment->comment.getSecrete()==1&&!comment.getUser().getName().equals(name)?GatherCommentResponse.gatherCommentResponseSecrete(comment):GatherCommentResponse.gatherCommentResponse(comment)).toList();
+        }
+        catch(Exception e){
+            return comments.stream().map(comment->comment.getSecrete()==0?GatherCommentResponse.gatherCommentResponse(comment):GatherCommentResponse.gatherCommentResponseSecrete(comment)).toList();
+        }
     }
 
     public List<GatherMemberResponse> getGatherMembers(Long gatherId) {

@@ -36,7 +36,7 @@ public class UserController {
         else return ResponseEntity.badRequest().body(new MessageResponse("T.T"));
     }
 
-    @PutMapping("/join/{gatherId}")
+    @PostMapping("/join/{gatherId}")
     public ResponseEntity<Object> joinGather(@PathVariable Long gatherId, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         String state =  userService.joinGather(gatherId, myUserDetails);
         if(state.equals("duplicated")){

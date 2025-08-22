@@ -1,6 +1,7 @@
 package com.example.seazle.controller;
 
 import com.example.seazle.dto.response.*;
+import com.example.seazle.service.GatherService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.seazle.service.GatherService;
 
 import java.util.List;
 

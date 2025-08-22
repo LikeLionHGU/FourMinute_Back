@@ -28,18 +28,25 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         String token = authorizationHeader.substring(7);
 
-        if(jwtUtil.isExpired(token)) {
+
+        try{
+            if(jwtUtil.isExpired(token)) {
+                response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+                return;
+            }
+            String name=jwtUtil.getUsername(token);
+            String role=jwtUtil.getRole(token);
+            User user=new User("","",role,name,"","");
+            MyUserDetails myUserDetails=new MyUserDetails(user);
+            Authentication authentication=new UsernamePasswordAuthenticationToken(myUserDetails,null,myUserDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
-            return;
+        }
+        catch(Exception e){
+            System.out.println("\n\n"+e.getMessage()+"\n\n");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
 
-        String name=jwtUtil.getUsername(token);
-        String role=jwtUtil.getRole(token);
-        User user=new User("","",role,name,"","");
-        MyUserDetails myUserDetails=new MyUserDetails(user);
-        Authentication authentication=new UsernamePasswordAuthenticationToken(myUserDetails,null,myUserDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
 
     }
 

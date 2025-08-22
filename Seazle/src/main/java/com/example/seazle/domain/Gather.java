@@ -23,6 +23,7 @@ public class Gather extends BaseEntity {
     private String sport;
     private String time;
     private Long capacity;
+    @Column(length = 1500)
     private String description;
     private String originalPrice;
     private String currentPrice;

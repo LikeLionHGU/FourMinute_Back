@@ -1,7 +1,6 @@
 package com.example.seazle.service;
 
 import com.example.seazle.domain.Location;
-import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,15 +41,15 @@ public class AnalysisService {
     public String summarizeAnalysis(Location location){
         StringBuilder analysis = new StringBuilder("{");
         List<Long> list = location.getAnalysis();
+        List<Long> newList = new ArrayList<>(list);
         for(int i=0;i<5;i++){
-            Long max=Collections.max(list);
-            int index=list.indexOf(max);
+            Long max=Collections.max(newList);
+            int index=newList.indexOf(max);
             analysis.append(keyWords[index]);
-            list.remove(index);
+            newList.remove(index);
         }
         analysis.append("}");
-        String result = aiGenerate("다음 문장들을 보고 10단어 내로 중요한 특징을 요약해줘: "+analysis);
-        return null;
+        return aiGenerate("다음 문장들을 보고 10단어 내로 중요한 특징을 요약해줘: "+analysis);
     }
 
     public String aiGenerate(String input) {

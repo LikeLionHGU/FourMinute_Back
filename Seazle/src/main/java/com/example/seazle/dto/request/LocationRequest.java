@@ -1,6 +1,9 @@
 package com.example.seazle.dto.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -17,8 +20,8 @@ public class LocationRequest {
     private String number;
     private String priceImgUrl;
     private String socialLink;
-    private Long longitude;
-    private Long latitude;
+    private Double longitude;
+    private Double latitude;
     private String reserveLink;
     private Double score;
     private Long price1;

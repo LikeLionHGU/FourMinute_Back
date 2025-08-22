@@ -15,6 +15,7 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 1000)
     private String content;
     private Long secrete;
 
@@ -27,11 +28,12 @@ public class Comment extends BaseEntity {
     private User user;
 
 
-    public static Comment comment(String content, Gather gather, User user) {
+    public static Comment comment(String content, Gather gather, User user, Long secrete) {
         return Comment.builder()
                 .content(content)
                 .gather(gather)
                 .user(user)
+                .secrete(secrete)
                 .build();
     }
 

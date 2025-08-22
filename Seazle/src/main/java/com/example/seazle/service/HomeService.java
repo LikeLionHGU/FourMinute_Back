@@ -9,11 +9,11 @@ import com.example.seazle.dto.request.GatherListRequest;
 import com.example.seazle.dto.request.LocationListRequest;
 import com.example.seazle.dto.response.GatherResponse;
 import com.example.seazle.dto.response.LocationResponse;
+import com.example.seazle.repository.GatherRepository;
+import com.example.seazle.repository.LocationRepository;
 import com.example.seazle.repository.ParticipateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.seazle.repository.GatherRepository;
-import com.example.seazle.repository.LocationRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,17 +30,12 @@ public class HomeService {
     private final ParticipateRepository participateRepository;
 
     public List<LocationResponse> getLocationList(LocationListRequest locationListRequest) {
-        List<Location> locations = new ArrayList<>();
+        List<Location> locations;
         if (locationListRequest.getSport().isEmpty()) {
             locations = locationRepository.findAll();
         }
         else{
-            String[] sports = locationListRequest.getSport().split(",");
-            for(String sport : sports) {
-                List<Location> locationsBySport = locationRepository.findAllBySport(sport);
-                locations.removeAll(locationsBySport);
-                locations.addAll(locationsBySport);
-            }
+            locations = locationRepository.findAllBySport(locationListRequest.getSport());
         }
         if(locationListRequest.getSorting()==0) {
             locations.sort(new ScoreComparator());
@@ -71,12 +66,7 @@ public class HomeService {
             gathers=gatherRepository.findAll();
         }
         else{
-            String[] sports = gatherListRequest.getSport().split(",");
-            for(String sport : sports) {
-                List<Gather> gathersBySport = gatherRepository.findAllBySport(sport);
-                gathers.removeAll(gathersBySport);
-                gathers.addAll(gathersBySport);
-            }
+            gathers = gatherRepository.findAllBySport(gatherListRequest.getSport());
         }
         if(!gatherListRequest.getDate().isEmpty()){
             LocalDate date=LocalDate.parse(gatherListRequest.getDate());

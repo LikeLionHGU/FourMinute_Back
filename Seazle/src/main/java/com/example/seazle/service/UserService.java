@@ -47,7 +47,7 @@ public class UserService {
             if (gather == null) return false;
             User user = userRepository.findByName(myUserDetails.getUsername()).orElse(null);
             if(user == null) return false;
-            commentRepository.save(Comment.comment(commentRequest.getContent(),gather,user));
+            commentRepository.save(Comment.comment(commentRequest.getContent(),gather,user,commentRequest.getSecrete()));
             return true;
         }
         catch (Exception e){
@@ -59,13 +59,18 @@ public class UserService {
     public Boolean writeReview(ReviewRequest reviewRequest, MyUserDetails myUserDetails) {
         try{
             Location location = locationRepository.findById(reviewRequest.getId()).orElse(null);
-            if(location == null) return false;
+            if(location == null) {
+                return false;
+            }
             User user = userRepository.findByName(myUserDetails.getUsername()).orElse(null);
-            if(user == null) return false;
+            if(user == null) {
+                return false;
+            }
             Review review = Review.review(reviewRequest.getContent(),reviewRequest.getScore(),location,user);
             reviewRepository.save(review);
             location.updateScore(review.getScore());
             location.updateAnalysis(review.getContent());
+            //location.updateAiReview(analysisService.summarizeAnalysis(location));
             return true;
         }
         catch(Exception e){

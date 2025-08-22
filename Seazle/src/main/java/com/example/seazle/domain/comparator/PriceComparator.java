@@ -7,6 +7,6 @@ import java.util.Comparator;
 public class PriceComparator implements Comparator<Location> {
     @Override
     public int compare(Location location1, Location location2) {
-        return location1.getPrice1().compareTo(location2.getPrice1());
+        return Long.compare(location1.getPrice1() + location1.getPrice2(), location2.getPrice1() + location2.getPrice2());
     }
 }

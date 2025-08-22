@@ -1,13 +1,13 @@
 package com.example.seazle.controller;
 
 import com.example.seazle.dto.request.GatherListRequest;
-import com.example.seazle.dto.response.GatherResponse;
 import com.example.seazle.dto.request.LocationListRequest;
+import com.example.seazle.dto.response.GatherResponse;
 import com.example.seazle.dto.response.LocationResponse;
+import com.example.seazle.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.seazle.service.HomeService;
 
 import java.util.List;
 

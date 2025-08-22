@@ -21,8 +21,8 @@ public class LocationDetailResponse {
     private String priceImgUrl;
     private String socialLink;
     private String aiReview;
-    private Long longitude;
-    private Long latitude;
+    private Double longitude;
+    private Double latitude;
     private Long reviewCount;
     private String reserveLink;
 

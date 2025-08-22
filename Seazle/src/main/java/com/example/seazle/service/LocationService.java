@@ -3,16 +3,15 @@ package com.example.seazle.service;
 import com.example.seazle.domain.Gather;
 import com.example.seazle.domain.Location;
 import com.example.seazle.domain.Review;
-import com.example.seazle.dto.response.*;
+import com.example.seazle.dto.response.LocationAnalysisResponse;
+import com.example.seazle.dto.response.LocationDetailResponse;
+import com.example.seazle.dto.response.LocationGatherResponse;
+import com.example.seazle.dto.response.LocationReviewResponse;
+import com.example.seazle.repository.LocationRepository;
 import com.example.seazle.repository.ParticipateRepository;
-import com.example.seazle.repository.ReviewRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.seazle.repository.LocationRepository;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,14 +24,9 @@ public class LocationService {
     private final AnalysisService analysisService;
     private final ParticipateRepository participateRepository;
 
-    @Transactional
     public LocationDetailResponse getLocationDetail(Long locationId) {
         Location location = locationRepository.findById(locationId).orElse(null);
         if(location==null) return null;
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime modified = location.getModified();
-        Duration duration = Duration.between(modified, now);
-        if(duration.toDays()>1) location.updateAiReview(analysisService.summarizeAnalysis(location));
         return LocationDetailResponse.locationDetailResponse(location);
     }
 
