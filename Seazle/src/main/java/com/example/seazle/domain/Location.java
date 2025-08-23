@@ -22,9 +22,10 @@ public class Location extends BaseEntity {
     private Long id;
 
     private String name;
+    @Column(length = 1000)
     private String imageUrl;
     private String sport;
-    @Column(length = 1000)
+    @Column(length = 500)
     private String description;
     private String address;
     private String time;
@@ -41,6 +42,7 @@ public class Location extends BaseEntity {
     private String aiReview;
     private String goodPart;
     private String badPart;
+    private String oneLine;
 
 
     @OneToMany(mappedBy="location", fetch= FetchType.LAZY, cascade=CascadeType.ALL)
@@ -76,6 +78,7 @@ public class Location extends BaseEntity {
                 .aiReview(locationRequest.getAiReview())
                 .goodPart(locationRequest.getGoodPart())
                 .badPart(locationRequest.getBadPart())
+                .oneLine(locationRequest.getAiReview())
                 .build();
     }
 

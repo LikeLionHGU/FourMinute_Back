@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Review extends BaseEntity {
+public class Review extends BaseEntity implements Comparable<Review>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,17 @@ public class Review extends BaseEntity {
     @ManyToOne
     @JoinColumn(nullable=false)
     private User user;
+
+    @Override
+    public int compareTo(Review review) {
+        if(this.getCreated().isBefore(review.getCreated())){
+            return 1;
+        }
+        else if(this.getCreated().isAfter(review.getCreated())){
+            return -1;
+        }
+        else return 0;
+    }
 
     public static Review review(String content, Double score, Location location, User user) {
         return Review.builder()

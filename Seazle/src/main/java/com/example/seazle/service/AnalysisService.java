@@ -1,12 +1,17 @@
 package com.example.seazle.service;
 
 import com.example.seazle.domain.Location;
+import com.example.seazle.repository.LocationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -18,8 +23,11 @@ public class AnalysisService {
 
     private final static RestTemplate restTemplate = new RestTemplate();
 
+    private final LocationRepository locationRepository;
+
     private final ChatClient chatClient;
-    public AnalysisService(ChatClient.Builder chatClientBuilder) {
+    public AnalysisService(LocationRepository locationRepository, ChatClient.Builder chatClientBuilder) {
+        this.locationRepository = locationRepository;
         this.chatClient = chatClientBuilder.build();
     }
 
@@ -38,22 +46,33 @@ public class AnalysisService {
         return Arrays.asList(Objects.requireNonNull(response.getBody()));
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Async
+    public void updateLocationAiReview(Long locationId) {
+        Location location=locationRepository.findById(locationId).orElse(null);
+        if(location==null) return;
+        String result = summarizeAnalysis(location);
+        System.out.println("\n\n"+result+"\n\n");
+        location.updateAiReview(result);
+    }
+
     public String summarizeAnalysis(Location location){
         StringBuilder analysis = new StringBuilder("{");
         List<Long> list = location.getAnalysis();
         List<Long> newList = new ArrayList<>(list);
-        for(int i=0;i<5;i++){
+        for(int i=0;i<10;i++){
             Long max=Collections.max(newList);
             int index=newList.indexOf(max);
             analysis.append(keyWords[index]);
             newList.remove(index);
         }
         analysis.append("}");
-        return aiGenerate("다음 문장들을 보고 10단어 내로 중요한 특징을 요약해줘: "+analysis);
+        return aiGenerate("다음 문장들을 보고 중요한 내용을 요약해줘: "+analysis);
     }
 
     public String aiGenerate(String input) {
         return this.chatClient.prompt()
+                .system("너는 친절한 안내원이야. 10단어 이내의 한 문장으로 답변해줘.")
                 .user(input)
                 .call()
                 .content();

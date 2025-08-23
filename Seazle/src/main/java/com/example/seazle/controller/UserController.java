@@ -40,7 +40,10 @@ public class UserController {
     public ResponseEntity<Object> joinGather(@PathVariable Long gatherId, @AuthenticationPrincipal MyUserDetails myUserDetails) {
         String state =  userService.joinGather(gatherId, myUserDetails);
         if(state.equals("duplicated")){
-            return ResponseEntity.badRequest().body(new MessageResponse("duplicated"));
+            return ResponseEntity.ok().body(new MessageResponse("duplicated"));
+        }
+        else if(state.equals("full")){
+            return ResponseEntity.ok().body(new MessageResponse("full"));
         }
         else if(state.equals("saved")){
             return ResponseEntity.ok().body(new MessageResponse("saved"));

@@ -25,7 +25,7 @@ public class LocationResponse {
                 .name(location.getName())
                 .thumbnail(location.getImageUrl())
                 .sport(location.getSport())
-                .description(location.getAiReview())
+                .description(location.getOneLine())
                 .region(location.getRegion())
                 .score(location.getScore())
                 .reviewCount((long)location.getReviews().size())

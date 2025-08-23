@@ -21,7 +21,7 @@ public class GatherLocationResponse {
         return GatherLocationResponse.builder()
                 .id(location.getId())
                 .name(location.getName())
-                .description(location.getAiReview())
+                .description(location.getOneLine())
                 .address(location.getAddress())
                 .time(location.getTime())
                 .image(location.getImageUrl())

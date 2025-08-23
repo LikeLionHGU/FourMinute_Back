@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +26,31 @@ public class GatherService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    public GatherDetailResponse getGatherDetail(Long gatherId) {
+    public GatherDetailResponse getGatherDetail(Long gatherId, HttpServletRequest request) {
+        String token=request.getHeader("Authorization");
         Gather gather=gatherRepository.findById(gatherId).orElse(null);
         if(gather==null) return null;
+        String state="";
+        if(token==null) state="ok";
+        else{
+            try{
+                token = token.substring(7);
+                String name=jwtUtil.getUsername(token);
+                User user=userRepository.findByName(name).orElse(null);
+                Long userId=user.getId();
+                if(participateRepository.findByGatherIdAndUserId(gatherId, userId).isPresent()){
+                    state="joined";
+                }
+                if(Objects.equals(participateRepository.countByGatherId(gatherId), gather.getCapacity())){
+                    state="full";
+                }
+            }
+            catch(Exception e){
+                state="ok";
+            }
+        }
         List<Participate> participates=participateRepository.findAllByGatherId(gatherId);
-        return GatherDetailResponse.gatherDetailResponse(gather,(long)participates.size());
+        return GatherDetailResponse.gatherDetailResponse(gather,(long)participates.size(),state);
     }
 
     public List<GatherCommentResponse> getGatherComments(Long gatherId, HttpServletRequest request) {

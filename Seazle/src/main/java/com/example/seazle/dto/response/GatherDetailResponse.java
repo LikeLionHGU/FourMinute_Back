@@ -25,8 +25,9 @@ public class GatherDetailResponse {
     private String makerContact;
     private String makerStatement;
     private Long total;
+    private String state;
 
-    public static GatherDetailResponse gatherDetailResponse(Gather gather, Long total) {
+    public static GatherDetailResponse gatherDetailResponse(Gather gather, Long total, String state) {
         return GatherDetailResponse.builder()
                 .id(gather.getId())
                 .title(gather.getTitle())
@@ -43,6 +44,7 @@ public class GatherDetailResponse {
                 .makerContact(gather.getMaker())
                 .makerStatement(gather.getUser().getStatement())
                 .total(total)
+                .state(state)
                 .build();
     }
 

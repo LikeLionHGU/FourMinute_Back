@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -25,14 +27,19 @@ public class UserService {
     private final CommentRepository commentRepository;
     private final ParticipateRepository participateRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AnalysisService analysisService;
 
     public String joinGather(Long gatherId, MyUserDetails myUserDetails) {
         try{
-            if (!gatherRepository.existsById(gatherId)) return null;
+            Gather gather = gatherRepository.findById(gatherId).orElse(null);
+            if (gather==null) return null;
             User user = userRepository.findByName(myUserDetails.getUsername()).orElse(null);
             if(user == null) return null;
             Participate participate = participateRepository.findByGatherIdAndUserId(gatherId,user.getId()).orElse(null);
             if(participate != null) return "duplicated";
+            if(Objects.equals(participateRepository.countByGatherId(gatherId), gather.getCapacity())){
+                return "full";
+            }
             participateRepository.save(new Participate(gatherId, user.getId()));
             return "saved";
         }
@@ -70,7 +77,7 @@ public class UserService {
             reviewRepository.save(review);
             location.updateScore(review.getScore());
             location.updateAnalysis(review.getContent());
-            //location.updateAiReview(analysisService.summarizeAnalysis(location));
+            analysisService.updateLocationAiReview(reviewRequest.getId());
             return true;
         }
         catch(Exception e){
@@ -98,5 +105,8 @@ public class UserService {
             return null;
         }
     }
+
+
+
 
 }

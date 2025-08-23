@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("http://localhost:3000","https://seazle.netlify.app/")
                 .exposedHeaders("Authorization","Content-Type")
                 .allowedHeaders("Authorization","Content-Type")
                 .allowCredentials(true)

@@ -20,8 +20,8 @@ public class GatherController {
     private final GatherService gatherService;
 
     @GetMapping("/detail/{gatherId}")
-    public ResponseEntity<Object> getGatherDetail(@PathVariable Long gatherId) {
-        GatherDetailResponse gatherDetail=gatherService.getGatherDetail(gatherId);
+    public ResponseEntity<Object> getGatherDetail(@PathVariable Long gatherId, HttpServletRequest request) {
+        GatherDetailResponse gatherDetail=gatherService.getGatherDetail(gatherId,request);
         if (gatherDetail==null) return ResponseEntity.badRequest().body(new MessageResponse("T.T"));
         return ResponseEntity.ok().body(gatherDetail);
     }

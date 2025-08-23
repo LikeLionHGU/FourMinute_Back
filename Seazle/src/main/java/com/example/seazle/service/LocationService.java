@@ -34,7 +34,7 @@ public class LocationService {
         Location location = locationRepository.findById(locationId).orElse(null);
         if(location==null) return null;
         List<Review> reviews = location.getReviews();
-        Collections.reverse(reviews);
+        Collections.sort(reviews);
         return reviews.stream().map(LocationReviewResponse::locationReviewResponse).toList();
     }
 
@@ -51,10 +51,10 @@ public class LocationService {
         List<LocationAnalysisResponse> locationAnalysis = new ArrayList<>();
         List<Long> analysis = location.getAnalysis();
         for(int i=0;i<5;i++){
-            Long max= Collections.max(analysis);
+            Long max=Collections.max(analysis);
             int index=analysis.indexOf(max);
             locationAnalysis.add(LocationAnalysisResponse.locationAnalysisResponse(AnalysisService.keyWords[index],max));
-            analysis.remove(index);
+            analysis.set(index,-1L);
         }
         return locationAnalysis;
     }
