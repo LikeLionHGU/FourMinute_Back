@@ -26,6 +26,7 @@ public class GatherDetailResponse {
     private String makerStatement;
     private Long total;
     private String state;
+    private Long salePercent;
 
     public static GatherDetailResponse gatherDetailResponse(Gather gather, Long total, String state) {
         return GatherDetailResponse.builder()
@@ -45,6 +46,7 @@ public class GatherDetailResponse {
                 .makerStatement(gather.getUser().getStatement())
                 .total(total)
                 .state(state)
+                .salePercent((long) ((Double.parseDouble(gather.getOriginalPrice())-Double.parseDouble(gather.getCurrentPrice()))/Double.parseDouble(gather.getOriginalPrice())*100))
                 .build();
     }
 

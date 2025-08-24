@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class HomeService {
         List<Location> locationSearch = new ArrayList<>();
         List<Location> locations = locationRepository.findAll();
         for(Location location : locations) {
-            if(location.getName().contains(input)||location.getDescription().contains(input)) {
+            if(location.getName().contains(input)||location.getOneLine().contains(input)||location.getRegion().contains(input)) {
                 locationSearch.add(location);
             }
         }
@@ -69,11 +69,14 @@ public class HomeService {
             gathers = gatherRepository.findAllBySport(gatherListRequest.getSport());
         }
         if(!gatherListRequest.getDate().isEmpty()){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDate date=LocalDate.parse(gatherListRequest.getDate());
+            List<Gather> newGathers=new ArrayList<>();
             for(Gather gather : gathers) {
-                LocalDateTime time=LocalDateTime.parse(gather.getTime());
-                if(!date.isEqual(time.toLocalDate())) gathers.remove(gather);
+                LocalDate time=LocalDate.parse(gather.getTime(),formatter);
+                if(date.equals(time)) newGathers.add(gather);
             }
+            return newGathers.stream().map(gather->GatherResponse.gatherResponse(gather,(long)participateRepository.findAllByGatherId(gather.getId()).size())).toList();
         }
         return gathers.stream().map(gather->GatherResponse.gatherResponse(gather,(long)participateRepository.findAllByGatherId(gather.getId()).size())).toList();
     }

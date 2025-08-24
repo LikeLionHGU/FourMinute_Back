@@ -21,7 +21,6 @@ import java.util.List;
 public class LocationService {
 
     private final LocationRepository locationRepository;
-    private final AnalysisService analysisService;
     private final ParticipateRepository participateRepository;
 
     public LocationDetailResponse getLocationDetail(Long locationId) {

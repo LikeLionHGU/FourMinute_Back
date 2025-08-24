@@ -52,7 +52,6 @@ public class AnalysisService {
         Location location=locationRepository.findById(locationId).orElse(null);
         if(location==null) return;
         String result = summarizeAnalysis(location);
-        System.out.println("\n\n"+result+"\n\n");
         location.updateAiReview(result);
     }
 
@@ -64,10 +63,10 @@ public class AnalysisService {
             Long max=Collections.max(newList);
             int index=newList.indexOf(max);
             analysis.append(keyWords[index]);
-            newList.remove(index);
+            newList.set(index,-1L);
         }
         analysis.append("}");
-        return aiGenerate("다음 문장들을 보고 중요한 내용을 요약해줘: "+analysis);
+        return aiGenerate("다음 문장들을 보고 강습 내용을 제외한 중요한 내용을 요약해서 소개해줘: "+analysis);
     }
 
     public String aiGenerate(String input) {
