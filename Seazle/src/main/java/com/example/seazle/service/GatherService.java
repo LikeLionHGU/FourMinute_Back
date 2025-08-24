@@ -30,9 +30,9 @@ public class GatherService {
         String token=request.getHeader("Authorization");
         Gather gather=gatherRepository.findById(gatherId).orElse(null);
         if(gather==null) return null;
-        String state="";
-        if(token==null) state="ok";
-        else{
+        String state="ok";
+        if(Objects.equals(participateRepository.countByGatherId(gatherId), gather.getCapacity())) state="full";
+        if(token!=null){
             try{
                 token = token.substring(7);
                 String name=jwtUtil.getUsername(token);
@@ -41,13 +41,8 @@ public class GatherService {
                 if(participateRepository.findByGatherIdAndUserId(gatherId, userId).isPresent()){
                     state="joined";
                 }
-                if(Objects.equals(participateRepository.countByGatherId(gatherId), gather.getCapacity())){
-                    state="full";
-                }
             }
-            catch(Exception e){
-                state="ok";
-            }
+            catch(Exception e){}
         }
         List<Participate> participates=participateRepository.findAllByGatherId(gatherId);
         return GatherDetailResponse.gatherDetailResponse(gather,(long)participates.size(),state);

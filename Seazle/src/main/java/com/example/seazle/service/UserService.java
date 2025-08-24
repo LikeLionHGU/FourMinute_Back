@@ -29,6 +29,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AnalysisService analysisService;
 
+    private final String[] images={"https://testalltest.s3.ap-northeast-2.amazonaws.com/likelion/KakaoTalk_Photo_2025-08-24-01-43-06.png","https://testalltest.s3.ap-northeast-2.amazonaws.com/likelion/%E1%84%91%E1%85%A6%E1%86%BC%E1%84%80%E1%85%B1%E1%86%AB.png","https://testalltest.s3.ap-northeast-2.amazonaws.com/likelion/%E1%84%80%E1%85%A5%E1%84%87%E1%85%AE%E1%86%A8%E1%84%8B%E1%85%B5.png"};
+
     public String joinGather(Long gatherId, MyUserDetails myUserDetails) {
         try{
             Gather gather = gatherRepository.findById(gatherId).orElse(null);
@@ -90,12 +92,13 @@ public class UserService {
             if(userRepository.existsByUsername(registerRequest.getUsername())){
                 return "duplicate";
             }
+            int random = (int)(Math.random()*images.length);
             User user = new User(
                     registerRequest.getUsername(),
                     passwordEncoder.encode(registerRequest.getPassword()),
                     "USER",
                     registerRequest.getName(),
-                    "",
+                    images[random],
                     registerRequest.getStatement()
             );
             userRepository.save(user);
