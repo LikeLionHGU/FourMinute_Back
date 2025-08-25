@@ -2,7 +2,6 @@ package com.example.seazle.service;
 
 import com.example.seazle.domain.Location;
 import com.example.seazle.repository.LocationRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

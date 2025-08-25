@@ -31,8 +31,5 @@ public class LoginController {
         return ResponseEntity.ok().body(new UserNameResponse(SecurityContextHolder.getContext().getAuthentication().getName()));
     }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<Object> logout(@AuthenticationPrincipal MyUserDetails myUserDetails) {
-//
-//    }
+
 }
